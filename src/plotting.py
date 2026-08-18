@@ -1,18 +1,12 @@
-from pathlib import Path
-
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-RAW_DATA_PATH = Path(__file__).parent.parent / "data" / "raw" / "text_data.csv"
-TARGET_PNG = Path(__file__).parent.parent / "artifacts" / "taxonomy.png"
 
+def plot_label_distribution(df: pd.DataFrame) -> go.Figure:
+    '''Plot taxonomy of a data file.'''
 
-def plot_raw_data_distribution() -> None:
-    '''Plot taxonomy of raw data file.'''
-
-    df = (pd.read_csv(RAW_DATA_PATH)
-            .drop(columns=['code', 'criticality', 'organization', 'question', 'row_index']))
+    df = df.drop(columns=['code', 'criticality', 'organization', 'question', 'row_index'])
 
     counts = (
         df.groupby(["label", "subcategory"], sort=False)
@@ -95,12 +89,4 @@ def plot_raw_data_distribution() -> None:
         showlegend=False,
     )
 
-    fig.write_image(
-        TARGET_PNG,
-        width=1400,
-        height=1600,
-        scale=3,  # multiplies output pixel dimensions (~3x) for a crisp, high-DPI image
-    ) 
-
-if __name__ == '__main__':
-    plot_raw_data_distribution()
+    return fig

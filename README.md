@@ -19,13 +19,18 @@ Once the data is downloaded, add it to the data/raw folder.
 
 To create a vizualization of the raw data taxonomy, run 
 ```
-uv run scripts/plot_raw_data_distribution.py
+uv run python -m scripts.plot_label_distribution
+```
+
+By default this plots `data/raw/text_data.csv` and saves the figure to `artifacts/taxonomy.png`. To plot a different file (e.g. a subsample) or save elsewhere, pass `--data-path` and/or `--target-path`:
+```
+uv run python -m scripts.plot_label_distribution --data-path data/interim/text_data_subsampled_20.csv --target-path artifacts/taxonomy_subsample_20.png
 ```
 
 ### Subsampling Raw Data
 The raw data contains a little over 10.000 rows. To create a smaller subset, you can run
 ```
-uv run scripts/subsample_data.py <number_of_desired_rows>
+uv run subsample_data.py <number_of_desired_rows>
 ```
 
 ## Contributing
