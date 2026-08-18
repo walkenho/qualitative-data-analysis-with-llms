@@ -12,13 +12,28 @@ INTERIM_DATA_DIR = Path(__file__).parent.parent / "data" / "interim"
 @app.command()
 def main(
     n: int = typer.Argument(..., help="Number of rows to subsample."),
+    drop_labels: bool = typer.Option(
+        False, "--drop-labels", help="Drop the label and subcategory columns."
+    ),
+    drop_additonal_columns: bool = typer.Option(
+        True, "--drop-misc-columns", help="Drop code, criticality, organization, question columns."
+    ),
 ) -> None:
     """Subsample N rows from data/raw/text_data.csv and save to data/interim/."""
     df = pd.read_csv(RAW_DATA_PATH)
     sampled = df.sample(n, random_state=42)
 
+    if drop_additonal_columns:
+        sampled = sampled.drop(columns=['code', 'criticality', 'organization', 'question', 'row_index'])
+
+    if drop_labels:
+        sampled = sampled.drop(columns=['label', 'subcategory'])
+        filename = f"text_data_subsampled_{n}_unlabeled.csv"
+    else:
+        filename = f"text_data_subsampled_{n}.csv"
+
     INTERIM_DATA_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = INTERIM_DATA_DIR / f"text_data_subsampled_{n}.csv"
+    output_path = INTERIM_DATA_DIR /filename
     sampled.to_csv(output_path, index=True)
 
     typer.echo(f"Saved {len(sampled)} rows to {output_path}")

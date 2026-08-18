@@ -29,8 +29,13 @@ uv run python -m scripts.plot_label_distribution --data-path data/interim/text_d
 
 ### Subsampling Raw Data
 The raw data contains a little over 10.000 rows. To create a smaller subset, you can run
-```
+```sh
 uv run subsample_data.py <number_of_desired_rows>
+```
+
+If you want to drop the labels, you can specify that as part of the script call:
+```sh
+uv run subsample_data.py <number_of_desired_rows> --drop-labels
 ```
 
 ## Contributing
